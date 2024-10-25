@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model google {
+  gid          String  @id
+  access_token String? @unique
+  users        users?
+}
+
+model users {
+  username                    String    @id
+  id                          String?   @unique
+  name                        String?
+  creation_time               DateTime? @db.Timestamptz(6)
+  chats_chats_recieverTousers chats[]   @relation("chats_recieverTousers")
+  chats_chats_senderTousers   chats[]   @relation("chats_senderTousers")
+  google                      google?   @relation(fields: [id], references: [gid], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model chats {
+  sender                      String
+  reciever                    String
+  message                     String
+  time                        DateTime @db.Timestamptz(6)
+  message_id                  String   @id
+  is_sent                     Boolean?
+  users_chats_recieverTousers users    @relation("chats_recieverTousers", fields: [reciever], references: [username], onDelete: NoAction, onUpdate: NoAction)
+  users_chats_senderTousers   users    @relation("chats_senderTousers", fields: [sender], references: [username], onDelete: NoAction, onUpdate: NoAction)
+
+  @@index([reciever], map: "reciever")
+}
