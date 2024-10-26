@@ -8,7 +8,7 @@ async function setupPassportGoogleAuth() {
   passport.use(new googleStrat.Strategy({
     clientID: process.env.GOOGLE_CLIENT_ID!,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-    callbackURL: 'https://fond-accepted-shrew.ngrok-free.app/auth/google/callback'
+    callbackURL: process.env.GOOGLE_CALLBACK_URL!,
   }, async (accessToken, refreshToken, profile, done) => {
     ////console.log({accessToken, refreshToken, profile});
     try {
