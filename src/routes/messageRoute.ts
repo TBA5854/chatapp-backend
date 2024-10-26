@@ -51,8 +51,9 @@ router.ws('/message', async (ws, req) => {
                 });
             });
             ws.on("message", async (msg: string) => {
-                // //console.log(onlineUsers);
+                // console.log(onlineUsers);
                 const message: Message = JSON.parse(msg);
+                // console.log(message);
                 if (message.sender != user.username) {
                     ws.send("Not Authorised");
                     return;
@@ -62,8 +63,11 @@ router.ws('/message', async (ws, req) => {
                     //console.log("user offline")
                     return;
                 }
-                await messageHandler(message, true);
-                ws.send(msg);
+                const created_msg = await messageHandler(message, true);
+                if (!created_msg) {
+                    return;
+                }
+                ws.send(JSON.stringify(created_msg));
             });
 
             ws.on("close", () => {

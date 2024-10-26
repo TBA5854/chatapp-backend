@@ -7,7 +7,7 @@ export type Message = {
     time: Date;
 };
 
-export async function messageHandler(msg: Message, isOnline: boolean): Promise<void> {
+export async function messageHandler(msg: Message, isOnline: boolean): Promise<Message|void> {
     try {
         var { message, sender, reciever, time } = msg;
         if (!message || !sender || !reciever) {
@@ -17,7 +17,7 @@ export async function messageHandler(msg: Message, isOnline: boolean): Promise<v
         if (!time) {
             time = new Date();
         }
-        await prisma.chats.create({
+        const M=await prisma.chats.create({
             data: {
                 message,
                 sender,
@@ -28,6 +28,7 @@ export async function messageHandler(msg: Message, isOnline: boolean): Promise<v
             },
         });
         //console.log(M);
+        return M;
     } catch (error) {
         console.error(error);
     }

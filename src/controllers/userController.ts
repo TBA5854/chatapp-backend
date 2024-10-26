@@ -36,6 +36,7 @@ export const createUser = async (req: Request, res: Response) => {
             });
             if (checkUser) {
                 res.status(400).json({ error: 'User already exists' });
+                return;
             }
             const user = await prisma.users.create({
                 data: {
