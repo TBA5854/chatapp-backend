@@ -40,7 +40,10 @@ export const getUserByUsername = async (req: Request, res: Response) => {
 export const deleteUser = async (req: Request, res: Response) => {
     const { username } = req.params;
     try {
-        const token = req.cookies['X-Auth-Token'];
+        const authHeader = req.headers.authorization;
+        const token = authHeader && authHeader.startsWith('Bearer ') 
+            ? authHeader.substring(7) 
+            : null;
         
         if (!token) {
             res.status(401).json({ error: 'Authentication required' });

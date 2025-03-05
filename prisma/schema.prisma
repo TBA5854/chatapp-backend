@@ -23,6 +23,7 @@ model chats {
   time                        DateTime @db.Timestamptz(6)
   message_id                  String   @id
   is_sent                     Boolean?
+  replied_to                  String?
   users_chats_recieverTousers users    @relation("chats_recieverTousers", fields: [reciever], references: [username], onDelete: NoAction, onUpdate: NoAction)
   users_chats_senderTousers   users    @relation("chats_senderTousers", fields: [sender], references: [username], onDelete: NoAction, onUpdate: NoAction)
 

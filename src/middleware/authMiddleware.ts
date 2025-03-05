@@ -1,35 +1,26 @@
-import { Request, Response } from "express";
-import { prisma } from "../helpers/dbController.js";
+import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
-// import { createUser } from "../controllers/userController.js";
 
 
-export async function authverify(req: Request, res: Response, next: Function) {
-    const incomimg_token = req.cookies;
-    ////console.log(incomimg_token);
+export async function authverify(req: Request, res: Response, next: NextFunction) {
+    const authHeader = req.headers.authorization;
+    const incomimg_token = authHeader && authHeader.startsWith('Bearer ') 
+        ? authHeader.substring(7) 
+        : null;    ////console.log(incomimg_token);
     if (!incomimg_token) {
-        res.redirect("/login");
-        return;
-    }
-    if (!incomimg_token['X-Auth-Token']) {
-        res.redirect("/login");
+        res.status(401).json({"error":"No Bearer Token"})
+        // res.redirect("/login");
         return;
     }
     try {
-        jwt.verify(incomimg_token['X-Auth-Token'], process.env.SECRET_KEY as string, async (err: any, decodedtoken: any) => {
+        jwt.verify(incomimg_token, process.env.SECRET_KEY as string, async (err: any, _decodedtoken: any) => {
             if (err) {
-                res.redirect("/login");
+                res.status(401).json({"error":"Invalid or expired token"});
                 return;
             }
             else {
                 // //console.log(decodedtoken);
-                await prisma.google.findUnique(
-                    {
-                        where: {
-                            access_token: decodedtoken.id
-                        }
-                    }
-                );
+                
                 //console.log(user)
 
                 // if (!user) {
