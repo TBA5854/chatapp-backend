@@ -130,7 +130,7 @@ app.ws("/message", async (ws, req) => {
           
         }
         
-        ws.send(JSON.stringify(created_msg));
+        ws.send(JSON.stringify({newId:created_msg.message_id,oldId:message.message_id}));
       } catch (err) {
         console.log("Error processing message:", err);
         ws.send("Error processing message");
