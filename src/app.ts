@@ -108,7 +108,7 @@ app.ws("/message", async (ws, req) => {
         if (!onlineUsers.has(message.reciever)) { 
           console.log(`Receiver ${message.reciever} is offline, storing message`);
           await messageHandler(message, false);
-          return;
+          // return;
         }
     
         console.log(`Receiver ${message.reciever} is online, delivering message`);
@@ -125,12 +125,16 @@ app.ws("/message", async (ws, req) => {
 
         if (receiverWs) {
           receiverWs.send(JSON.stringify(created_msg));
-        } else {
-          throw new Error("no wsss");
-          
-        }
+        } 
         
-        ws.send(JSON.stringify({newId:created_msg.message_id,oldId:message.message_id}));
+        
+        // Send confirmation back to the sender with both IDs
+        const confirmationMessage = { 
+          "newId": created_msg.message_id, 
+          "oldId": message.message_id 
+        };
+        console.log("Sending confirmation:", confirmationMessage);
+        ws.send(JSON.stringify(confirmationMessage));
       } catch (err) {
         console.log("Error processing message:", err);
         ws.send("Error processing message");
