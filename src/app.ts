@@ -1,8 +1,6 @@
 import Express from "express";
 import dotenv from "dotenv";
-import passport from 'passport'
 import session from 'express-session'
-import init from "./helpers/passportController.js"
 import { connectDB } from "./helpers/dbController.js";
 import {router as authRouter} from './routes/authRoutes.js'
 import  userRouter from './routes/userRoutes.js'
@@ -17,10 +15,8 @@ dotenv.config();
 connectDB();
 
 ws(app);
-init();
 app.use(Express.json());
 app.use(cookieParser());
-app.use(passport.initialize());
 app.use(session({
     secret: process.env.SECRET_KEY!,
     resave: true,

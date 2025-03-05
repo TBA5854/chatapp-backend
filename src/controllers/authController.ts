@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { prisma } from "../helpers/dbController.js";
 declare global {
     namespace Express {
         interface User {
@@ -25,7 +24,7 @@ export async function login(req: Request, res: Response): Promise<void> {
         //     }
         // });
         //console.log("hiii");
-        // //console.log(token);
+        // //console.log(token);// 
         // //console.log(req.user!.accessToken);
 
             // createUser(req, res);
@@ -39,21 +38,7 @@ export async function login(req: Request, res: Response): Promise<void> {
     }
 }
 
-export async function logout(req: Request, res: Response): Promise<void> {
-    try {
-        await prisma.google.update({
-            where: {
-                gid: req.user!.profile.id as string
-            },
-            data: {
-                access_token: null
-            }
-        });
-        ////console.log('User access token updated successfully.');
-    } catch (error) {
-        console.error('Error updating user access token:', error);
-    }
-    res.cookie('X-Auth-Token', '', { maxAge: 1 });
+export async function logout(_req: Request, res: Response): Promise<void> {
     res.send("Logout Successful");
 }
 

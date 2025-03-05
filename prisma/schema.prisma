@@ -7,20 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model google {
-  gid          String  @id
-  access_token String? @unique
-  users        users?
-}
-
 model users {
   username                    String    @id
-  id                          String?   @unique
+  password                    String    
   name                        String?
   creation_time               DateTime? @db.Timestamptz(6)
   chats_chats_recieverTousers chats[]   @relation("chats_recieverTousers")
   chats_chats_senderTousers   chats[]   @relation("chats_senderTousers")
-  google                      google?   @relation(fields: [id], references: [gid], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model chats {
