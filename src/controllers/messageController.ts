@@ -25,7 +25,7 @@ export async function messageHandler(msg: Message, isOnline: boolean): Promise<M
                 sender,
                 reciever,
                 time,
-                message_id: `${sender}-${reciever}-${time}-${randomUUID}`,
+                message_id: `${sender}-${reciever}-${time}-${randomUUID()}`,
                 is_sent: isOnline,
                 replied_to
             },
